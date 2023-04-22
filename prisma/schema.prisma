@@ -14,10 +14,73 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
+model Image {
+    id          String   @id @default(cuid())
+    title       String
+    url         String
+    aspectRatio Float
+    Post        Post[]
+    Photo       Photo[]
+    AvatarIn    Review[] @relation("avatar")
+    Review      Review[] @relation("attachment")
+}
+
+model Post {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    title     String
+    text      String[] @db.Text
+    srcUrl    String?  @db.Text
+    views     Int      @default(0)
+    image     Image?   @relation(fields: [imageId], references: [id])
+    imageId   String?
+}
+
+model Photo {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title     String
+    category  String
+    views     Int      @default(0)
+    image     Image?   @relation(fields: [imageId], references: [id])
+    imageId   String?
+}
+
+model Review {
+    id           String   @id @default(cuid())
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    name         String
+    text         String[] @db.Text
+    avatar       Image?   @relation("avatar", fields: [avatarId], references: [id])
+    avatarId     String?
+    attachment   Image?   @relation("attachment", fields: [attachmentId], references: [id])
+    attachmentId String?
+}
+
+model Request {
+    id            String     @id @default(cuid())
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
+    name          String
+    phoneNumber   String
+    groupSize     Int
+    dates         DateTime[]
+    comment       String?    @db.Text //User's comment
+    description   String?    @db.Text //Admin's note
+    status        Status?    @default(new)
+    excursionDate DateTime?
+    groupNumber   Int?
+    referral      String?
+}
+
+enum Status {
+    new
+    registered
+    active
+    fulfilled
 }
 
 // Necessary for Next auth
