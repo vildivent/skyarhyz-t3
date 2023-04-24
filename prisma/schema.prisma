@@ -30,7 +30,7 @@ model Post {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     title     String
-    text      String[] @db.Text
+    text      String   @db.Text
     srcUrl    String?  @db.Text
     views     Int      @default(0)
     image     Image?   @relation(fields: [imageId], references: [id])
@@ -53,7 +53,7 @@ model Review {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     name         String
-    text         String[] @db.Text
+    text         String   @db.Text
     avatar       Image?   @relation("avatar", fields: [avatarId], references: [id])
     avatarId     String?
     attachment   Image?   @relation("attachment", fields: [attachmentId], references: [id])
