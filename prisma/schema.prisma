@@ -38,45 +38,56 @@ model Post {
 }
 
 model Photo {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    title     String
-    category  String
-    views     Int      @default(0)
-    image     Image?   @relation(fields: [imageId], references: [id])
-    imageId   String?
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    title       String
+    description String?  @db.Text
+    category    String
+    views       Int      @default(0)
+    image       Image?   @relation(fields: [imageId], references: [id])
+    imageId     String?
 }
 
 model Review {
-    id           String   @id @default(cuid())
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
+    id           String        @id @default(cuid())
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
     name         String
-    text         String   @db.Text
-    avatar       Image?   @relation("avatar", fields: [avatarId], references: [id])
+    text         String        @db.Text
+    stars        Int
+    status       ReviewStatus? @default(new)
+    upvotes      Int?          @default(0)
+    downvotes    Int?          @default(0)
+    views        Int           @default(0)
+    avatar       Image?        @relation("avatar", fields: [avatarId], references: [id])
     avatarId     String?
-    attachment   Image?   @relation("attachment", fields: [attachmentId], references: [id])
+    attachment   Image?        @relation("attachment", fields: [attachmentId], references: [id])
     attachmentId String?
 }
 
+enum ReviewStatus {
+    new
+    registered
+}
+
 model Request {
-    id            String     @id @default(cuid())
-    createdAt     DateTime   @default(now())
-    updatedAt     DateTime   @updatedAt
+    id            String         @id @default(cuid())
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
     name          String
     phoneNumber   String
     groupSize     Int
     dates         DateTime[]
-    comment       String?    @db.Text //User's comment
-    description   String?    @db.Text //Admin's note
-    status        Status?    @default(new)
+    comment       String?        @db.Text //User's comment
+    description   String?        @db.Text //Admin's note
+    status        RequestStatus? @default(new)
     excursionDate DateTime?
     groupNumber   Int?
     referral      String?
 }
 
-enum Status {
+enum RequestStatus {
     new
     registered
     active

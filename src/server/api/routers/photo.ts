@@ -4,23 +4,23 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 import {
-  ZPostCreate,
-  ZPostUpdatePublic,
-  ZPostUpdate,
-  ZPostGet,
+  ZPhotoCreate,
+  ZPhotoUpdatePublic,
+  ZPhotoUpdate,
+  ZPhotoGet,
   ZDelete,
 } from "~/utils/zodSchemas";
 import { deleteFile } from "~/utils/fileApi";
 
-export const postRouter = createTRPCRouter({
+export const photoRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(ZPostCreate)
+    .input(ZPhotoCreate)
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.post.create({
+      return await ctx.prisma.photo.create({
         data: {
           title: input.title,
-          text: input.text,
-          srcUrl: input.srcUrl,
+          description: input.description,
+          category: input.category,
           image: { create: input.image },
         },
         include: { image: true },
@@ -28,11 +28,11 @@ export const postRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(ZPostUpdate)
+    .input(ZPhotoUpdate)
     .mutation(async ({ ctx, input }) => {
       let imageProp;
 
-      if (input.image || input.image === null) {
+      if (input.image) {
         imageProp = {
           image: {
             delete: true,
@@ -40,19 +40,19 @@ export const postRouter = createTRPCRouter({
           },
         };
 
-        const post = await ctx.prisma.post.findUnique({
+        const photo = await ctx.prisma.photo.findUnique({
           where: { id: input.id },
           include: { image: true },
         });
-        await deleteFile(post?.image?.url);
+        await deleteFile(photo?.image?.url);
       }
 
-      return await ctx.prisma.post.update({
+      return await ctx.prisma.photo.update({
         where: { id: input.id },
         data: {
           title: input.title,
-          text: input.text,
-          srcUrl: input.srcUrl,
+          description: input.description,
+          category: input.category,
           ...imageProp,
         },
         include: { image: true },
@@ -60,11 +60,11 @@ export const postRouter = createTRPCRouter({
     }),
 
   updatePublic: publicProcedure
-    .input(ZPostUpdatePublic)
+    .input(ZPhotoUpdatePublic)
     .mutation(async ({ ctx, input }) => {
       if (!input.viewsInc) return;
 
-      return await ctx.prisma.post.update({
+      return await ctx.prisma.photo.update({
         where: { id: input.id },
         data: { views: { increment: 1 } },
         include: { image: true },
@@ -72,26 +72,27 @@ export const postRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure.input(ZDelete).mutation(async ({ ctx, input }) => {
-    const post = await ctx.prisma.post.delete({
+    const photo = await ctx.prisma.photo.delete({
       where: { id: input.id },
       include: { image: true },
     });
 
-    await deleteFile(post?.image?.url);
+    await deleteFile(photo?.image?.url);
     await ctx.prisma.image.delete({
-      where: { id: post.imageId || undefined },
+      where: { id: photo.imageId || undefined },
     });
 
-    return post;
+    return photo;
   }),
 
-  get: publicProcedure.input(ZPostGet).query(async ({ ctx, input }) => {
-    return await ctx.prisma.post.findMany({
+  get: publicProcedure.input(ZPhotoGet).query(async ({ ctx, input }) => {
+    return await ctx.prisma.photo.findMany({
       where: {
         OR: [
           { title: { contains: input?.q ?? "", mode: "insensitive" } },
-          { text: { contains: input?.q ?? "", mode: "insensitive" } },
+          { description: { contains: input?.q ?? "", mode: "insensitive" } },
         ],
+        category: input.category,
       },
       orderBy: { createdAt: "desc" },
       include: { image: true },

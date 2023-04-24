@@ -23,7 +23,7 @@ const server = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
 
   FILE_UPLOADER_DOMAIN: z.string().min(1),
-  FILE_UPLOADER_PROTECTED_URL: z.string().url(),
+  FILE_UPLOADER_PASSWORD: z.string().min(1),
 
   EMAIL: z.string().email().optional(),
   EMAIL_PASS: z.string().min(1).optional(),
@@ -54,7 +54,7 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   FILE_UPLOADER_DOMAIN: process.env.FILE_UPLOADER_DOMAIN,
   NEXT_PUBLIC_FILE_UPLOADER_URL: process.env.NEXT_PUBLIC_FILE_UPLOADER_URL,
-  FILE_UPLOADER_PROTECTED_URL: process.env.FILE_UPLOADER_PROTECTED_URL,
+  FILE_UPLOADER_PASSWORD: process.env.FILE_UPLOADER_PASSWORD,
   EMAIL: process.env.EMAIL,
   EMAIL_PASS: process.env.EMAIL,
   EMAIL_TO: process.env.EMAIL,
