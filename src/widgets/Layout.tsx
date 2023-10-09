@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Navbar from "~/widgets/Navbar";
 import Footer from "~/widgets/Footer";
 
 type LayoutProps = {
-  children: JSX.Element;
+  children: ReactNode;
 };
 const Layout = ({ children }: LayoutProps) => {
   return (
