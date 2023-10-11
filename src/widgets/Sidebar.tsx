@@ -90,11 +90,7 @@ const SidebarContent = () => {
         <Row href="/about" title="Обо мне" icon={<AboutIcon />} />
         <Row href="/contacts" title="Контакты" icon={<ContactsIcon />} />
 
-        <div
-          className={`bg-darkgray ${
-            openedId === "collaboration" ? "" : "h-14"
-          }`}
-        />
+        <div className={`bg-darkgray ${openedId === "collab" ? "" : "h-14"}`} />
         {/* Проблема видимости вложенных ссылок, когда меню закрыто. Используется заглушка для конкретного случая*/}
       </div>
     </div>
