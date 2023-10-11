@@ -24,7 +24,7 @@ export const MenuLink = ({
   return (
     <Link
       href={href}
-      className={`flex h-10 w-full items-center gap-5 px-5 hover:text-primary ${
+      className={`flex w-full items-center gap-5 px-5 py-2 hover:text-primary ${
         transparent ? "" : "bg-darkgray hover:bg-gray"
       } ${selected ? "text-primary" : "text-smoke"} ${
         padding ? "pr-[3.75rem]" : ""
@@ -51,7 +51,7 @@ export const MenuButton = ({
 }: MenuButtonProps) => {
   return (
     <button
-      className={`flex h-10 w-full items-center gap-5 px-5 hover:text-primary ${
+      className={`flex w-full items-center gap-5 px-5 py-2 hover:text-primary ${
         transparent ? "" : "bg-darkgray hover:bg-gray"
       } ${selected ? "text-primary" : "text-smoke"} ${
         padding ? "pr-[3.75rem]" : ""
@@ -77,12 +77,12 @@ export const MenuButtonWithArrow = ({
 }: MenuButtonWithArrowProps) => {
   return (
     <button
-      className={`flex h-10 w-full items-center justify-between gap-5 px-5 hover:text-primary ${
+      className={`flex w-full items-center justify-between gap-5 px-5 py-2 hover:text-primary ${
         transparent ? "" : "bg-darkgray hover:bg-gray"
       }`}
       {...props}
     >
-      <div className="flex gap-5">
+      <div className="flex items-center gap-5">
         <div className="h-5 w-5">{icon}</div>
         <span>{children}</span>
       </div>
