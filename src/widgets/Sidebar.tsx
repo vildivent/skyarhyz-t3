@@ -89,9 +89,6 @@ const SidebarContent = () => {
         </Category>
         <Row href="/about" title="Обо мне" icon={<AboutIcon />} />
         <Row href="/contacts" title="Контакты" icon={<ContactsIcon />} />
-
-        <div className={`bg-darkgray ${openedId === "collab" ? "" : "h-14"}`} />
-        {/* Проблема видимости вложенных ссылок, когда меню закрыто. Используется заглушка для конкретного случая*/}
       </div>
     </div>
   );
@@ -166,7 +163,9 @@ const Category = ({
       </MenuButtonWithArrow>
 
       <motion.div
-        className={`${openedId === id ? "" : "pointer-events-none"}`}
+        className={`overflow-hidden ${
+          openedId === id ? "" : "pointer-events-none"
+        }`}
         animate={{
           height: openedId === id ? "auto" : 0,
           transition: {
